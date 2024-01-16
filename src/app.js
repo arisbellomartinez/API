@@ -1,12 +1,14 @@
 const express = require('express');
+const morgan = require('morgan');
 const app = express();
 const port = 8080
 
-app.get('/', (req, res) => {
 
-    res.send('Hello World!')
-})
+app.use(morgan("dev"));
+app.use(express.json());
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}!`)
-})
+//Routes
+
+app.use(require("./routes/index.js"))
+
+app.listen(port);
