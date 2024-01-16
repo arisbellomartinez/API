@@ -9,6 +9,29 @@ app.use(express.json());
 
 //Routes
 
-app.use(require("./routes/index.js"))
+app.get('/', (req, res) => {
+    res.send('Welcome')
+})
+app.post('/', (req, res) => {
+    res.send('Metodo post')
+})
+
+app.put('/', (req, res) => {
+    res.send('Metodo put')
+})
+
+app.delete('/', (req, res) => {
+    res.send('Metodo delete')
+})
+
+
+
+
+
+
+
+
+
+
 
 app.listen(port);

@@ -1,17 +1,21 @@
 const {Router} = require("express");
 const router = Router();
 
+const example = require("../example.json")
 
-router.get("/", (req, res) => {
-    res.json({title:"Welcome"});
-});
+
+
 
 router.get("/test", (req, res) => {
-    res.json("Esta corriendo");
+    res.json("Esta vivo!, esta vivo!");
 })
 
-router.get("/example", (req, res) => {
-    res.json("example")
-});
+
+
+router.post("/example", (req, res) => {
+    
+    res.send("llegue")
+})
+
 
 module.exports = router;
