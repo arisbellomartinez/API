@@ -9,7 +9,7 @@ export const getUsuariosById = async (req, res) => {
     const id = req.params.id
     const [rows] = await db.query('SELECT * FROM usuarios WHERE id = ?',[id])
     if (rows.length = 0) {
-      return res.status(404).json({status:"Empleado no encontrado"})  
+      return res.status(404).json({message:"Empleado no encontrado"})  
     }
     res.json(rows[0])
 }
@@ -24,10 +24,22 @@ export const createUsarios = async (req, res) => {
     })
 }
 
-export const updateUsuarios = (req, res) => {
-    res.send('Metodo put')
+export const updateUsuarios = async (req, res) => {
+
+    const {id} = req.params
+    const {name,cedula} = req.body
+    
+    const [result] = await db.query('UPDATE usuarios SET name = ?, cedula = ? WHERE id = ?',[name,cedula,id])
+    if (result.affectedRows === 0) {
+        return res.status(404).json("Empleado no encontrado")
+    }
+    res.send("Usuario actualizado")
 }
 
-export const deleteUsuarios = (req, res) => {
-    res.send('Metodo delete')
+export const deleteUsuarios =async (req, res) => {
+    const [result]=await db.query('DELETE FROM usuarios WHERE id = ?',[req.params.id])
+    if (result.affectedRows<=0) {
+        return res.status(404).json({message:"Usuario no encontrado"})
+    }
+    res.sendStatus(204)
 }
