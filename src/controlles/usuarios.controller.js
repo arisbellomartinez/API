@@ -29,7 +29,7 @@ export const updateUsuarios = async (req, res) => {
     const {id} = req.params
     const {name,cedula} = req.body
     
-    const [result] = await db.query('UPDATE usuarios SET name = ?, cedula = ? WHERE id = ?',[name,cedula,id])
+    const [result] = await db.query('UPDATE usuarios SET name = IFNULL(?,name), cedula = INFNULL(?,cedula) WHERE id = ?',[name,cedula,id])
     if (result.affectedRows === 0) {
         return res.status(404).json("Empleado no encontrado")
     }
