@@ -3,7 +3,8 @@ import morgan from "morgan"
 import usuariosRoutes from "./routes/usuarios.routes.js"
 import indexRoutes from "./routes/index.routes.js"
 const app = express();
-const port = 8080
+
+
 app.use(morgan("dev"));
 app.use(express.json())
 
@@ -14,14 +15,8 @@ app.use(express.json())
 app.use("/api",indexRoutes)
 app.use("/api",usuariosRoutes)
 
+app.use((req,res,next) => {
+    res.status(404).json({error: "Not Found"})
+})
 
-
-
-
-
-
-
-
-
-
-app.listen(port);
+export default app;
