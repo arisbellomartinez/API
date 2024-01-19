@@ -12,8 +12,8 @@ app.use(express.json())
 
 //Routes
 
-app.use("/api",indexRoutes)
-app.use("/api",usuariosRoutes)
+app.use("/tasks",indexRoutes)
+app.use("/tasks",usuariosRoutes)
 
 app.use((req,res,next) => {
     res.status(404).json({error: "Not Found"})
