@@ -8,7 +8,7 @@ export const getUsuariosById = async (req, res) => {
 
     const id = req.params.id
     const [rows] = await db.query('SELECT * FROM usuarios WHERE id = ?',[id])
-    if (rows.length <= 0) {
+    if (rows.length = 0) {
       return res.status(404).json({status:"Empleado no encontrado"})  
     }
     res.json(rows[0])
