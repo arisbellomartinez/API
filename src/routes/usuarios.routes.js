@@ -11,7 +11,7 @@ router.get('/:id', getUsuariosById)
 
 router.post('/', createUsarios )
 
-router.put('/:id', updateUsuarios)
+router.patch('/:id', updateUsuarios)
 
 router.delete('/:id', deleteUsuarios)
 
