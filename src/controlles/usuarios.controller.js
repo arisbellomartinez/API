@@ -25,15 +25,20 @@ export const getUsuariosById = async (req, res) => {
 
 export const createUsarios = async (req, res) => {
     try {
-        
         const {title,description,status}= req.body
-        const [rows] = await db.query('INSERT INTO usuarios (title,description,status) VALUES (?, ?, ?)',[title,description,status])
-        res.send({
-            id:rows.insertId,
-            title,
-            description,
-            status
-        })
+        if (title != null && title != undefined && description != null && description != undefined && status != null && status != undefined) {
+        
+            const [rows] = await db.query('INSERT INTO usuarios (title,description,status) VALUES (?, ?, ?)',[title,description,status])
+            res.send({
+            
+                id:rows.insertId,
+                title,
+                description,
+                status
+            })
+        } else {
+            return res.send("Ay error con los datos enviados")
+        }
     } catch (error) {
         return res.status(500).json({message:"Sufrio un error al crear los usuarios"})
     }
@@ -41,11 +46,16 @@ export const createUsarios = async (req, res) => {
 
 export const updateUsuarios = async (req, res) => {
     try {
-        
         const {id} = req.params
         const {title,description,status} = req.body
+        if (title != null && title != undefined && description != null && description != undefined && status != null && status != undefined) {
+            
+            const [result] = await db.query('UPDATE usuarios SET title = ?, description = ?, status= ? WHERE id = ?',[title,description,status,id])
+        } else {
+            return res.send("Ay error con los datos enviados")
+        }
         
-        const [result] = await db.query('UPDATE usuarios SET title = ?, description = ?, status= ? WHERE id = ?',[title,description,status,id])
+        
         if (result.affectedRows === 0) {
             return res.status(404).json("Empleado no encontrado")
         }
