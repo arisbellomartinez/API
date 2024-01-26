@@ -4,9 +4,10 @@ USE ejemplodb;
 
 CREATE TABLE IF NOT EXISTS usuarios (
     id INT(10) NOT NULL AUTO_INCREMENT,
-    name VARCHAR(20) DEFAULT NULL,
-    cedula INT(20 ) DEFAULT NULL,
+    title VARCHAR(50) DEFAULT NULL,
+    description VARCHAR(200) DEFAULT NULL,
+    status VARCHAR(50) DEFAULT NULL,
     PRIMARY KEY (id)
 );
 
-INSERT INTO usuarios values ("Aris", 123), ("Bello", 1234),("Martinez", 1235);
+INSERT INTO usuarios values ("Aris", "Joven 25","Vivo" ), ("Bello", "En pruebas","Algo"),("Martinez", "1235","Prueba");
