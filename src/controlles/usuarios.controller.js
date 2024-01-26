@@ -26,12 +26,13 @@ export const getUsuariosById = async (req, res) => {
 export const createUsarios = async (req, res) => {
     try {
         
-        const {name,cedula}= req.body
-        const [rows] = await db.query('INSERT INTO usuarios (name,cedula) VALUES (?, ?)',[name,cedula])
+        const {title,description,status}= req.body
+        const [rows] = await db.query('INSERT INTO usuarios (title,description,status) VALUES (?, ?, ?)',[title,description,status])
         res.send({
             id:rows.insertId,
-            name,
-            cedula
+            title,
+            description,
+            status
         })
     } catch (error) {
         return res.status(500).json({message:"Sufrio un error al crear los usuarios"})
@@ -42,9 +43,9 @@ export const updateUsuarios = async (req, res) => {
     try {
         
         const {id} = req.params
-        const {name,cedula} = req.body
+        const {title,description,status} = req.body
         
-        const [result] = await db.query('UPDATE usuarios SET name = ?, cedula = ? WHERE id = ?',[name,cedula,id])
+        const [result] = await db.query('UPDATE usuarios SET title = ?, description = ?, status= ? WHERE id = ?',[title,description,status,id])
         if (result.affectedRows === 0) {
             return res.status(404).json("Empleado no encontrado")
         }
