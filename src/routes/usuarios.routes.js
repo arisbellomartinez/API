@@ -9,7 +9,7 @@ router.get('/', getUsuarios)
 router.get('/:id', getUsuariosById)
 
 
-router.post('/', createUsarios )
+router.put('/', createUsarios )
 
 router.patch('/:id', updateUsuarios)
 

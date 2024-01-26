@@ -2,11 +2,14 @@ import express from "express"
 import morgan from "morgan"
 import usuariosRoutes from "./routes/usuarios.routes.js"
 import indexRoutes from "./routes/index.routes.js"
+import bodyParser from "body-parser"
 const app = express();
 
 
 app.use(morgan("dev"));
 app.use(express.json())
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
 
 
 
