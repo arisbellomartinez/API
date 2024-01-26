@@ -3,6 +3,7 @@ import morgan from "morgan"
 import usuariosRoutes from "./routes/usuarios.routes.js"
 import indexRoutes from "./routes/index.routes.js"
 import bodyParser from "body-parser"
+import { PORT } from "./config/config.js"
 const app = express();
 
 
@@ -22,4 +23,4 @@ app.use((req,res,next) => {
     res.status(404).json({error: "Not Found"})
 })
 
-export default app;
+app.listen(PORT)
