@@ -1,80 +1,116 @@
-import { db } from "../config/db/db.js"
+// Import necessary modules
+import { db } from "../config/db/db.js";
 
+// Get all users
 export const getUsuarios = async (req, res) => {
     try {
+        // Fetch all users from the database
+        const [rows] = await db.query('SELECT * FROM usuarios');
         
-        const [rows]=await db.query('SELECT * FROM usuarios')
-        res.json(rows)
+        // Respond with the retrieved users as JSON
+        res.json(rows);
     } catch (error) {
-        return res.status(500).json({message:"Sufrio un error al obtener los usuarios"})
+        // Handle errors and respond with a 500 Internal Server Error
+        return res.status(500).json({ message: "Error fetching users" });
     }
-}
+};
+
+// Get user by ID
 export const getUsuariosById = async (req, res) => {
     try {
-        
-        const id = req.params.id
-        const [rows] = await db.query('SELECT * FROM usuarios WHERE id = ?',[id])
-        if (rows.length = 0) {
-          return res.status(404).json({message:"Empleado no encontrado"})  
-        }
-        res.json(rows[0])
-    } catch (error) {
-        return res.status(500).json({message:"Sufrio un error al obtener los usuarios por id"})
-    }
-}
+        // Extract user ID from request parameters
+        const id = req.params.id;
 
-export const createUsarios = async (req, res) => {
+        // Fetch user by ID from the database
+        const [rows] = await db.query('SELECT * FROM usuarios WHERE id = ?', [id]);
+
+        // Check if user exists; if not, respond with a 404 Not Found
+        if (rows.length === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Respond with the retrieved user as JSON
+        res.json(rows[0]);
+    } catch (error) {
+        // Handle errors and respond with a 500 Internal Server Error
+        return res.status(500).json({ message: "Error fetching user by ID" });
+    }
+};
+
+// Create a new user
+export const createUsuarios = async (req, res) => {
     try {
-        const {title,description,status}= req.body
-        if (title != null && title != undefined && description != null && description != undefined && status != null && status != undefined) {
-        
-            const [rows] = await db.query('INSERT INTO usuarios (title,description,status) VALUES (?, ?, ?)',[title,description,status])
-            res.send({
-            
-                id:rows.insertId,
+        // Extract data from the request body
+        const { title, description, status } = req.body;
+
+        // Check if required data is provided
+        if (title != null && description != null && status != null) {
+            // Insert new user into the database
+            const [rows] = await db.query('INSERT INTO usuarios (title, description, status) VALUES (?, ?, ?)', [title, description, status]);
+
+            // Respond with the created user details as JSON
+            res.json({
+                id: rows.insertId,
                 title,
                 description,
                 status
-            })
+            });
         } else {
-            return res.send("Ay error con los datos enviados")
+            // Respond with an error message if data is missing
+            return res.status(400).send("Invalid data provided");
         }
     } catch (error) {
-        return res.status(500).json({message:"Sufrio un error al crear los usuarios"})
+        // Handle errors and respond with a 500 Internal Server Error
+        return res.status(500).json({ message: "Error creating user" });
     }
-}
+};
 
+// Update user by ID
 export const updateUsuarios = async (req, res) => {
     try {
-        const {id} = req.params
-        const {title,description,status} = req.body
-        if (title != null && title != undefined && description != null && description != undefined && status != null && status != undefined) {
-            
-            const [result] = await db.query('UPDATE usuarios SET title = ?, description = ?, status= ? WHERE id = ?',[title,description,status,id])
+        // Extract user ID from request parameters
+        const { id } = req.params;
+
+        // Extract data from the request body
+        const { title, description, status } = req.body;
+
+        // Check if required data is provided
+        if (title != null && description != null && status != null) {
+            // Update user in the database
+            const [result] = await db.query('UPDATE usuarios SET title = ?, description = ?, status = ? WHERE id = ?', [title, description, status, id]);
+
+            // Check if the user was found and updated
+            if (result.affectedRows === 0) {
+                return res.status(404).json("User not found");
+            }
+
+            // Respond with a success message
+            res.send("User updated");
         } else {
-            return res.send("Ay error con los datos enviados")
+            // Respond with an error message if data is missing
+            return res.status(400).send("Invalid data provided");
         }
-        
-        
-        if (result.affectedRows === 0) {
-            return res.status(404).json("Empleado no encontrado")
-        }
-        res.send("Usuario actualizado")
     } catch (error) {
-        return res.status(500).json({message:"Sufrio un error al actualizarr los usuarios"})
+        // Handle errors and respond with a 500 Internal Server Error
+        return res.status(500).json({ message: "Error updating user" });
     }
+};
 
-}
-
-export const deleteUsuarios =async (req, res) => {
+// Delete user by ID
+export const deleteUsuarios = async (req, res) => {
     try {
-        
-        const [result]=await db.query('DELETE FROM usuarios WHERE id = ?',[req.params.id])
-        if (result.affectedRows<=0) {
-            return res.status(404).json({message:"Usuario no encontrado"})
+        // Delete user from the database by ID
+        const [result] = await db.query('DELETE FROM usuarios WHERE id = ?', [req.params.id]);
+
+        // Check if the user was found and deleted
+        if (result.affectedRows <= 0) {
+            return res.status(404).json({ message: "User not found" });
         }
-        res.sendStatus(204)
+
+        // Respond with a 204 No Content status
+        res.sendStatus(204);
     } catch (error) {
-        return res.status(500).json({message:"Sufrio un error al eliminar los usuarios"})
+        // Handle errors and respond with a 500 Internal Server Error
+        return res.status(500).json({ message: "Error deleting user" });
     }
-}
+};

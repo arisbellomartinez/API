@@ -1,7 +1,10 @@
+-- Create the database if it doesn't exist
 CREATE DATABASE IF NOT EXISTS ejemplodb;
 
+-- Use the created database
 USE ejemplodb;
 
+-- Create a table 'usuarios' if it doesn't exist
 CREATE TABLE IF NOT EXISTS usuarios (
     id INT(10) NOT NULL AUTO_INCREMENT,
     title VARCHAR(50) DEFAULT NULL,
@@ -10,4 +13,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
     PRIMARY KEY (id)
 );
 
-INSERT INTO usuarios values ("Aris", "Joven 25","Vivo" ), ("Bello", "En pruebas","Algo"),("Martinez", "1235","Prueba");
+-- Insert data into the 'usuarios' table
+INSERT INTO usuarios VALUES 
+    ("Aris", "Joven 25", "Vivo"),
+    ("Bello", "En pruebas", "Algo"),
+    ("Martinez", "1235", "Prueba");
