@@ -36,6 +36,7 @@ export const signUp = async (req,res) => {
                         usuario,
                         password
             })
+            
         }else{
             
             match=0
