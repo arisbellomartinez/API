@@ -10,6 +10,8 @@ export const db = createPool({
     database: DB_DATABASE
 });
 
+
+
 // The database connection pool is exported for reuse in other parts of the application.
 // It is configured with the details provided in the config.js file.
 

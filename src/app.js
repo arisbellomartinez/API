@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import { PORT } from "./config/config.js";
 import usuariosRoutes from "./routes/usuarios.routes.js";
 import indexRoutes from "./routes/index.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 // Create an Express application instance
 const app = express();
@@ -28,6 +29,8 @@ app.use("/tasks", indexRoutes);
 
 // Use usuarios routes for "/tasks" path
 app.use("/tasks", usuariosRoutes);
+
+app.use(authRoutes)
 
 // Error handling for 404 Not Found
 app.use((req, res, next) => {

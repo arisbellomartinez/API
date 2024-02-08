@@ -13,8 +13,15 @@ CREATE TABLE IF NOT EXISTS usuarios (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS auth (
+    id INT(10) AUTO_INCREMENT,
+    usuario VARCHAR(20) DEFAULT NULL,
+    password VARCHAR(100) DEFAULT NULL,
+    PRIMARY KEY (id)
+);
+
 -- Insert data into the 'usuarios' table
 INSERT INTO usuarios VALUES 
-    ("Aris", "Joven 25", "Vivo"),
-    ("Bello", "En pruebas", "Algo"),
-    ("Martinez", "1235", "Prueba");
+    (1,"Aris", "Joven 25", "Vivo"),
+    (2,"Bello", "En pruebas", "Algo"),
+    (3,"Martinez", "1235", "Prueba");
