@@ -60,8 +60,10 @@ export const signIn = async (req,res) => {
         if (element.usuario == usuario ) {
             const condition = bcryptjs.compareSync(password,element.password);
             if (condition) {
-                
                 matchUser=2
+                const token = jwt.sign({id:element.id},SECRET_KEY,{expiresIn:86400})
+                res.json({token})
+                
             }else{
                 matchUser = 1
             }
@@ -71,7 +73,5 @@ export const signIn = async (req,res) => {
         return res.status(400).json({ message: "User no register"});
     } else if (matchUser==1){
         return res.status(400).json({ message: "Password incorrect"});
-    }else {
-        res.json({token:""})
     }
 };
