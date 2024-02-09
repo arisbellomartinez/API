@@ -40,7 +40,7 @@ export const signUp = async (req,res) => {
         }else{
             
             match=0
-            return res.status(400).send("Invalid data provided ya exit");
+            return res.status(400).send("Invalid data provided user ya exit");
         }
     }
      catch (error) {
