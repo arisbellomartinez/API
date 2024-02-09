@@ -30,7 +30,8 @@ app.use("/tasks", indexRoutes);
 // Use usuarios routes for "/tasks" path
 app.use("/tasks", usuariosRoutes);
 
-app.use(authRoutes)
+// Use auth routes for other paths
+app.use(authRoutes);
 
 // Error handling for 404 Not Found
 app.use((req, res, next) => {
@@ -41,3 +42,4 @@ app.use((req, res, next) => {
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+

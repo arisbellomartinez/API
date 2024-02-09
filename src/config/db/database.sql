@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     PRIMARY KEY (id)
 );
 
+-- Create a table 'auth' if it doesn't exist
 CREATE TABLE IF NOT EXISTS auth (
     id INT(10) AUTO_INCREMENT,
     usuario VARCHAR(20) DEFAULT NULL,
@@ -21,7 +22,7 @@ CREATE TABLE IF NOT EXISTS auth (
 );
 
 -- Insert data into the 'usuarios' table
-INSERT INTO usuarios VALUES 
-    (1,"Aris", "Joven 25", "Vivo"),
-    (2,"Bello", "En pruebas", "Algo"),
-    (3,"Martinez", "1235", "Prueba");
+INSERT INTO usuarios (id, title, description, status) VALUES 
+    (1, 'Aris', 'Joven 25', 'Vivo'),
+    (2, 'Bello', 'En pruebas', 'Algo'),
+    (3, 'Martinez', '1235', 'Prueba');
