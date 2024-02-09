@@ -1,12 +1,14 @@
 import { db } from "../config/db/db.js";
 import bcryptjs from "bcryptjs";
+import jwt from "jsonwebtoken"
+import { SECRET_KEY } from "../config/config.js";
 
 
 const allSing = async (req,res) => {
-        // Fetch all users from the database
+        
         const [rows] = await db.query('SELECT * FROM ejemplodb.auth');
         
-        // Respond with the retrieved users as JSON
+      
         
         return rows
     
@@ -16,8 +18,7 @@ const allSing = async (req,res) => {
 
 export const signUp = async (req,res) => {
     try {
-        let match=0
-        console.log(match);        
+        let match=0       
         const {usuario,password} = req.body;
         const aux = await allSing();
         aux.forEach((user)=>{
@@ -31,12 +32,11 @@ export const signUp = async (req,res) => {
             const crypt = bcryptjs.hashSync(password);
                         const [rows]= await db.query("INSERT INTO auth (usuario,password) VALUES (?,?)",[usuario,crypt]);
             
-                        res.json({
-                        id:rows.insertId,
-                        usuario,
-                        password
-            })
-            
+                        
+
+            const token = jwt.sign({id:rows.insertId},SECRET_KEY,{expiresIn:86400})
+
+            res.status(200).json({token})
         }else{
             
             match=0
