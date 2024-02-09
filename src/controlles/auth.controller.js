@@ -51,5 +51,27 @@ export const signUp = async (req,res) => {
 }
 
 export const signIn = async (req,res) => {
-    res.json("Sing In")
+
+    let matchUser = 0
+    const {usuario,password} = req.body;
+    const aux = await allSing();
+
+    aux.forEach((element) => {
+        if (element.usuario == usuario ) {
+            const condition = bcryptjs.compareSync(password,element.password);
+            if (condition) {
+                
+                matchUser=2
+            }else{
+                matchUser = 1
+            }
+        }
+    });
+    if (matchUser==0) {
+        return res.status(400).json({ message: "User no register"});
+    } else if (matchUser==1){
+        return res.status(400).json({ message: "Password incorrect"});
+    }else {
+        res.json({token:""})
+    }
 };
