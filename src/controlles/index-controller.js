@@ -1,14 +1,14 @@
 // Import necessary modules
-import { db } from "../config/db/db.js";
+import knexInstance from "../config/db/db.js";
 
 // Define an Express.js route handler for testing
 export const test = async (req, res) => {
     try {
         // Execute a simple SQL query to test the database connection
-        const [result] = await db.query("SELECT 1+1");
+        const aux = knexInstance("1+1")
 
         // Send the result as JSON response
-        res.json(result);
+        res.json(aux);
     } catch (error) {
         // Handle errors gracefully
         console.error("Error in test route:", error);

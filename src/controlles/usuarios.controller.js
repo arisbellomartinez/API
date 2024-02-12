@@ -53,7 +53,7 @@ export const createUsuarios = async (req, res) => {
 
             const [aux] =  await knexInstance(T_USUARIOS).insert(obj)
 
-            console.log(obj);
+            
 
             // Respond with the created user details as JSON
             res.json({
@@ -89,7 +89,6 @@ export const updateUsuarios = async (req, res) => {
             const aux =await knexInstance(T_USUARIOS).where("id","=",id).update(obj)
             // console.log(aux);
             
-            console.log(aux);
 
             // Check if the user was found and updated
             if (aux === 0) {

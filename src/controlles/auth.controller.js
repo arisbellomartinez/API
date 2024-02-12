@@ -1,37 +1,44 @@
 // Import necessary modules
-import { db } from "../config/db/db.js";
+import knexInstance from "../config/db/db.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { SECRET_KEY } from "../config/config.js";
+import { SECRET_KEY, T_AUTH } from "../config/config.js";
 
 
 // Function to fetch all users from the database
 const allSing = async () => {
-    const [rows] = await db.query('SELECT * FROM auth');
-    return rows;
+    const aux = await knexInstance(T_AUTH).select("*")
+    return aux;
 };
 
 // Sign up route handler
 export const signUp = async (req, res) => {
     try {
         let match = 0;
-        const { usuario, password } = req.body;
+        const obj = req.body;
         const aux = await allSing();
         
         // Check if the provided username already exists
         aux.forEach((user) => {
-            if (user.usuario == usuario) {
+            if (user.usuario == obj.usuario) {
                 match++;
             }
         });
+        
 
         if (match == 0) {
             // Hash the password
-            const crypt = bcryptjs.hashSync(password);
+            const crypt = bcryptjs.hashSync(obj.password);
+
+            const newObj= {
+                usuario: obj.usuario,
+                password: crypt
+            }
             // Insert user into the database
-            const [rows] = await db.query("INSERT INTO auth (usuario, password) VALUES (?, ?)", [usuario, crypt]);
+            const [aux2] = await knexInstance(T_AUTH).insert(newObj);
             // Generate JWT token
-            const token = jwt.sign({ id: rows.insertId }, SECRET_KEY, { expiresIn: 86400 });
+            const token = jwt.sign({ id: aux2 }, SECRET_KEY, { expiresIn: 86400 });
+            console.log(aux2);
             // Respond with the token
             res.status(200).json({ token });
         } else {
@@ -47,13 +54,13 @@ export const signUp = async (req, res) => {
 // Sign in route handler
 export const signIn = async (req, res) => {
     let matchUser = 0;
-    const { usuario, password } = req.body;
+    const obj = req.body;
     const aux = await allSing();
 
     // Check if the provided username and password match with the database
     aux.forEach((element) => {
-        if (element.usuario == usuario) {
-            const condition = bcryptjs.compareSync(password, element.password);
+        if (element.usuario == obj.usuario) {
+            const condition = bcryptjs.compareSync(obj.password, element.password);
             if (condition) {
                 matchUser = 2;
                 const token = jwt.sign({ id: element.id }, SECRET_KEY, { expiresIn: 86400 });

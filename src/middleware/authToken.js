@@ -1,7 +1,7 @@
 // Import necessary modules
 import jwt from "jsonwebtoken";
-import { SECRET_KEY } from "../config/config.js";
-import { db } from "../config/db/db.js";
+import { SECRET_KEY, T_AUTH } from "../config/config.js";
+import knexInstance from "../config/db/db.js";
 
 // Middleware function to verify JWT token
 export const verifyToken = async (req, res, next) => {
@@ -18,10 +18,11 @@ export const verifyToken = async (req, res, next) => {
         const decoded = jwt.verify(token, SECRET_KEY);
 
         // Check if the user exists in the database
-        const [rows] = await db.query("SELECT * FROM auth WHERE id = ?", [decoded.id]);
+
+        const aux = await knexInstance(T_AUTH).select("*").where("id","=", decoded.id)
 
         // If user does not exist, return 404 Not Found
-        if (rows.length === 0) {
+        if (aux === 0) {
             return res.status(404).json({ message: "User does not exist" });
         }
 
