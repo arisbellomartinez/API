@@ -4,9 +4,10 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { SECRET_KEY } from "../config/config.js";
 
+
 // Function to fetch all users from the database
 const allSing = async () => {
-    const [rows] = await db.query('SELECT * FROM ejemplodb.auth');
+    const [rows] = await db.query('SELECT * FROM auth');
     return rows;
 };
 

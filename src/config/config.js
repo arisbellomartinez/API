@@ -12,6 +12,8 @@ export const DB_PASS = process.env.DB_PASS || "12345";
 export const DB_DATABASE = process.env.DB_DATABASE || "ejemplodb";
 export const DB_PORT = process.env.DB_PORT || "3306";
 export const SECRET_KEY = process.env.SECRET_KEY;
+export const T_USUARIOS = process.env.T_USUARIOS;
+export const T_AUTH=process.env.T_AUTH;
 
 // Environment variables provide configuration options for the application.
 // The dotenv module loads these variables from a .env file into the process.env object.

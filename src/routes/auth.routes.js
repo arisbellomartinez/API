@@ -1,6 +1,6 @@
 // Import necessary modules
 import { Router } from "express";
-import { signIn, signUp } from "../controllers/auth.controller.js";
+import { signIn,signUp } from "../controlles/auth.controller.js";
 
 // Create an Express router instance
 const router = Router();

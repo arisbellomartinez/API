@@ -1,14 +1,16 @@
 // Import necessary modules
-import { db } from "../config/db/db.js";
+import { T_USUARIOS } from "../config/config.js";
+import knexInstance from "../config/db/db.js";
 
 // Get all users
 export const getUsuarios = async (req, res) => {
     try {
         // Fetch all users from the database
-        const [rows] = await db.query('SELECT * FROM usuarios');
+
+        const aux = await knexInstance(T_USUARIOS).select("*")
         
         // Respond with the retrieved users as JSON
-        res.json(rows);
+        res.json(aux);
     } catch (error) {
         // Handle errors and respond with a 500 Internal Server Error
         return res.status(500).json({ message: "Error fetching users" });
@@ -22,15 +24,15 @@ export const getUsuariosById = async (req, res) => {
         const id = req.params.id;
 
         // Fetch user by ID from the database
-        const [rows] = await db.query('SELECT * FROM usuarios WHERE id = ?', [id]);
+        const aux= await knexInstance(T_USUARIOS).select("*").where("id","=", id)
 
         // Check if user exists; if not, respond with a 404 Not Found
-        if (rows.length === 0) {
+        if (aux.length === 0) {
             return res.status(404).json({ message: "User not found" });
         }
 
         // Respond with the retrieved user as JSON
-        res.json(rows[0]);
+        res.json(aux);
     } catch (error) {
         // Handle errors and respond with a 500 Internal Server Error
         return res.status(500).json({ message: "Error fetching user by ID" });
@@ -40,20 +42,25 @@ export const getUsuariosById = async (req, res) => {
 // Create a new user
 export const createUsuarios = async (req, res) => {
     try {
-        // Extract data from the request body
-        const { title, description, status } = req.body;
+        // // Extract data from the request body
+        const obj = req.body
+       
 
         // Check if required data is provided
-        if (title != null && description != null && status != null) {
-            // Insert new user into the database
-            const [rows] = await db.query('INSERT INTO usuarios (title, description, status) VALUES (?, ?, ?)', [title, description, status]);
+        if (obj.title != null && obj.description != null && obj.status != null) {
+            // // Insert new user into the database
+            
+
+            const [aux] =  await knexInstance(T_USUARIOS).insert(obj)
+
+            console.log(obj);
 
             // Respond with the created user details as JSON
             res.json({
-                id: rows.insertId,
-                title,
-                description,
-                status
+                id: aux,
+                title:obj.title,
+                description:obj.description,
+                status:obj.status
             });
         } else {
             // Respond with an error message if data is missing
@@ -61,7 +68,7 @@ export const createUsuarios = async (req, res) => {
         }
     } catch (error) {
         // Handle errors and respond with a 500 Internal Server Error
-        return res.status(500).json({ message: "Error creating user" });
+        return res.status(500).json({ message: "Error creating user 1" });
     }
 };
 
@@ -72,15 +79,20 @@ export const updateUsuarios = async (req, res) => {
         const { id } = req.params;
 
         // Extract data from the request body
-        const { title, description, status } = req.body;
+        const obj = req.body;
 
         // Check if required data is provided
-        if (title != null && description != null && status != null) {
-            // Update user in the database
-            const [result] = await db.query('UPDATE usuarios SET title = ?, description = ?, status = ? WHERE id = ?', [title, description, status, id]);
+        if (obj.title != null && obj.description != null && obj.status != null) {
+            // // Update user in the database
+            // // const [result] = await db.query('UPDATE usuarios SET title = ?, description = ?, status = ? WHERE id = ?', [title, description, status, id]);
+
+            const aux =await knexInstance(T_USUARIOS).where("id","=",id).update(obj)
+            // console.log(aux);
+            
+            console.log(aux);
 
             // Check if the user was found and updated
-            if (result.affectedRows === 0) {
+            if (aux === 0) {
                 return res.status(404).json("User not found");
             }
 
@@ -100,10 +112,12 @@ export const updateUsuarios = async (req, res) => {
 export const deleteUsuarios = async (req, res) => {
     try {
         // Delete user from the database by ID
-        const [result] = await db.query('DELETE FROM usuarios WHERE id = ?', [req.params.id]);
+        // const [result] = await db.query('DELETE FROM usuarios WHERE id = ?', [req.params.id]);
+
+        const aux = await knexInstance(T_USUARIOS).delete().where("id","=",req.params.id)
 
         // Check if the user was found and deleted
-        if (result.affectedRows <= 0) {
+        if (aux <= 0) {
             return res.status(404).json({ message: "User not found" });
         }
 
