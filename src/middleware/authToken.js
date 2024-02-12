@@ -18,11 +18,10 @@ export const verifyToken = async (req, res, next) => {
         const decoded = jwt.verify(token, SECRET_KEY);
 
         // Check if the user exists in the database
-
-        const aux = await knexInstance(T_AUTH).select("*").where("id","=", decoded.id)
+        const user = await knexInstance(T_AUTH).select("*").where("id", "=", decoded.id);
 
         // If user does not exist, return 404 Not Found
-        if (aux === 0) {
+        if (user.length === 0) {
             return res.status(404).json({ message: "User does not exist" });
         }
 

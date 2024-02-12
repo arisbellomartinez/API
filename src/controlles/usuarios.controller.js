@@ -6,11 +6,10 @@ import knexInstance from "../config/db/db.js";
 export const getUsuarios = async (req, res) => {
     try {
         // Fetch all users from the database
+        const users = await knexInstance(T_USUARIOS).select("*");
 
-        const aux = await knexInstance(T_USUARIOS).select("*")
-        
         // Respond with the retrieved users as JSON
-        res.json(aux);
+        res.json(users);
     } catch (error) {
         // Handle errors and respond with a 500 Internal Server Error
         return res.status(500).json({ message: "Error fetching users" });
@@ -24,15 +23,15 @@ export const getUsuariosById = async (req, res) => {
         const id = req.params.id;
 
         // Fetch user by ID from the database
-        const aux= await knexInstance(T_USUARIOS).select("*").where("id","=", id)
+        const user = await knexInstance(T_USUARIOS).select("*").where("id", "=", id);
 
         // Check if user exists; if not, respond with a 404 Not Found
-        if (aux.length === 0) {
+        if (user.length === 0) {
             return res.status(404).json({ message: "User not found" });
         }
 
         // Respond with the retrieved user as JSON
-        res.json(aux);
+        res.json(user);
     } catch (error) {
         // Handle errors and respond with a 500 Internal Server Error
         return res.status(500).json({ message: "Error fetching user by ID" });
@@ -42,25 +41,20 @@ export const getUsuariosById = async (req, res) => {
 // Create a new user
 export const createUsuarios = async (req, res) => {
     try {
-        // // Extract data from the request body
-        const obj = req.body
-       
+        // Extract data from the request body
+        const obj = req.body;
 
         // Check if required data is provided
         if (obj.title != null && obj.description != null && obj.status != null) {
-            // // Insert new user into the database
-            
-
-            const [aux] =  await knexInstance(T_USUARIOS).insert(obj)
-
-            
+            // Insert new user into the database
+            const [newUserId] = await knexInstance(T_USUARIOS).insert(obj);
 
             // Respond with the created user details as JSON
             res.json({
-                id: aux,
-                title:obj.title,
-                description:obj.description,
-                status:obj.status
+                id: newUserId,
+                title: obj.title,
+                description: obj.description,
+                status: obj.status
             });
         } else {
             // Respond with an error message if data is missing
@@ -68,7 +62,7 @@ export const createUsuarios = async (req, res) => {
         }
     } catch (error) {
         // Handle errors and respond with a 500 Internal Server Error
-        return res.status(500).json({ message: "Error creating user 1" });
+        return res.status(500).json({ message: "Error creating user" });
     }
 };
 
@@ -83,15 +77,11 @@ export const updateUsuarios = async (req, res) => {
 
         // Check if required data is provided
         if (obj.title != null && obj.description != null && obj.status != null) {
-            // // Update user in the database
-            // // const [result] = await db.query('UPDATE usuarios SET title = ?, description = ?, status = ? WHERE id = ?', [title, description, status, id]);
-
-            const aux =await knexInstance(T_USUARIOS).where("id","=",id).update(obj)
-            // console.log(aux);
-            
+            // Update user in the database
+            const updatedCount = await knexInstance(T_USUARIOS).where("id", "=", id).update(obj);
 
             // Check if the user was found and updated
-            if (aux === 0) {
+            if (updatedCount === 0) {
                 return res.status(404).json("User not found");
             }
 
@@ -111,12 +101,10 @@ export const updateUsuarios = async (req, res) => {
 export const deleteUsuarios = async (req, res) => {
     try {
         // Delete user from the database by ID
-        // const [result] = await db.query('DELETE FROM usuarios WHERE id = ?', [req.params.id]);
-
-        const aux = await knexInstance(T_USUARIOS).delete().where("id","=",req.params.id)
+        const deletedCount = await knexInstance(T_USUARIOS).delete().where("id", "=", req.params.id);
 
         // Check if the user was found and deleted
-        if (aux <= 0) {
+        if (deletedCount <= 0) {
             return res.status(404).json({ message: "User not found" });
         }
 

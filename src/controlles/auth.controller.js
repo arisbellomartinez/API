@@ -4,10 +4,9 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { SECRET_KEY, T_AUTH } from "../config/config.js";
 
-
 // Function to fetch all users from the database
 const allSing = async () => {
-    const aux = await knexInstance(T_AUTH).select("*")
+    const aux = await knexInstance(T_AUTH).select("*");
     return aux;
 };
 
@@ -25,20 +24,22 @@ export const signUp = async (req, res) => {
             }
         });
         
-
         if (match == 0) {
             // Hash the password
             const crypt = bcryptjs.hashSync(obj.password);
 
-            const newObj= {
+            // Create a new user object
+            const newUser = {
                 usuario: obj.usuario,
                 password: crypt
-            }
+            };
+
             // Insert user into the database
-            const [aux2] = await knexInstance(T_AUTH).insert(newObj);
+            const [insertedUser] = await knexInstance(T_AUTH).insert(newUser);
+
             // Generate JWT token
-            const token = jwt.sign({ id: aux2 }, SECRET_KEY, { expiresIn: 86400 });
-            console.log(aux2);
+            const token = jwt.sign({ id: insertedUser }, SECRET_KEY, { expiresIn: 86400 });
+
             // Respond with the token
             res.status(200).json({ token });
         } else {
@@ -63,6 +64,7 @@ export const signIn = async (req, res) => {
             const condition = bcryptjs.compareSync(obj.password, element.password);
             if (condition) {
                 matchUser = 2;
+                // Generate JWT token
                 const token = jwt.sign({ id: element.id }, SECRET_KEY, { expiresIn: 86400 });
                 // Respond with the token
                 res.json({ token });
