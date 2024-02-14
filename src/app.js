@@ -6,6 +6,7 @@ import { PORT } from "./config/config.js";
 import usuariosRoutes from "./routes/usuarios.routes.js";
 import indexRoutes from "./routes/index.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import { logger } from "./config/logger.js";
 
 // Create an Express application instance
 const app = express();
@@ -35,11 +36,13 @@ app.use(authRoutes);
 
 // Error handling for 404 Not Found
 app.use((req, res, next) => {
+    logger.log("error", "404 Not Found"+ req.status)
     res.status(404).json({ error: "Not Found" });
 });
 
 // Start the server on the specified port
 app.listen(PORT, () => {
+    logger.log("info", `Server is running on port ${PORT}`);
     console.log(`Server is running on port ${PORT}`);
 });
 

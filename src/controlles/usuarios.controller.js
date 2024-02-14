@@ -1,6 +1,7 @@
 // Import necessary modules
 import { T_USUARIOS } from "../config/config.js";
 import knexInstance from "../config/db/db.js";
+import { logger } from "../config/logger.js";
 
 // Get all users
 export const getUsuarios = async (req, res) => {
@@ -10,7 +11,11 @@ export const getUsuarios = async (req, res) => {
 
         // Respond with the retrieved users as JSON
         res.json(users);
+
+        logger.info("info","getUsuarios")
     } catch (error) {
+
+        logger.error("error",error)
         // Handle errors and respond with a 500 Internal Server Error
         return res.status(500).json({ message: "Error fetching users" });
     }
@@ -27,12 +32,16 @@ export const getUsuariosById = async (req, res) => {
 
         // Check if user exists; if not, respond with a 404 Not Found
         if (user.length === 0) {
+            logger.log("warn","User not found")
             return res.status(404).json({ message: "User not found" });
         }
 
         // Respond with the retrieved user as JSON
         res.json(user);
+        logger.log("info","getUsario id")
     } catch (error) {
+
+        logger.error("error",error)
         // Handle errors and respond with a 500 Internal Server Error
         return res.status(500).json({ message: "Error fetching user by ID" });
     }
@@ -56,11 +65,15 @@ export const createUsuarios = async (req, res) => {
                 description: obj.description,
                 status: obj.status
             });
+
+            logger.info("info","createUsuarios succesfull")
         } else {
+            logger.log("warn","createUsuarios failed invalid data")
             // Respond with an error message if data is missing
             return res.status(400).send("Invalid data provided");
         }
     } catch (error) {
+        logger.error("error",error)
         // Handle errors and respond with a 500 Internal Server Error
         return res.status(500).json({ message: "Error creating user" });
     }
@@ -82,16 +95,20 @@ export const updateUsuarios = async (req, res) => {
 
             // Check if the user was found and updated
             if (updatedCount === 0) {
+                logger.log("warn","User not found")
                 return res.status(404).json("User not found");
             }
 
             // Respond with a success message
             res.send("User updated");
+            logger.log("info","User update succesfull")
         } else {
+            logger.log("warn","updateUsuarios failed invalid data")
             // Respond with an error message if data is missing
             return res.status(400).send("Invalid data provided");
         }
     } catch (error) {
+        logger.error("error",error)
         // Handle errors and respond with a 500 Internal Server Error
         return res.status(500).json({ message: "Error updating user" });
     }
@@ -105,12 +122,15 @@ export const deleteUsuarios = async (req, res) => {
 
         // Check if the user was found and deleted
         if (deletedCount <= 0) {
+            logger.log("warn","User not found")
             return res.status(404).json({ message: "User not found" });
         }
 
         // Respond with a 204 No Content status
         res.sendStatus(204);
+        logger.log("info","User delete succesfull")
     } catch (error) {
+        logger.error("error",error)
         // Handle errors and respond with a 500 Internal Server Error
         return res.status(500).json({ message: "Error deleting user" });
     }
