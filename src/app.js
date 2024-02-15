@@ -36,13 +36,16 @@ app.use(authRoutes);
 
 // Error handling for 404 Not Found
 app.use((req, res, next) => {
-    logger.log("error", "404 Not Found"+ req.status)
+    // Log error and return 404 Not Found status
+    logger.error("404 Not Found");
     res.status(404).json({ error: "Not Found" });
 });
 
 // Start the server on the specified port
 app.listen(PORT, () => {
-    logger.log("info", `Server is running on port ${PORT}`);
+    // Log info and print server status
+    logger.info(`Server is running on port ${PORT}`);
     console.log(`Server is running on port ${PORT}`);
 });
+
 

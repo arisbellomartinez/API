@@ -44,6 +44,7 @@ export const signUp = async (req, res) => {
             // Respond with the token
             res.status(200).json({ token });
 
+            // Log success message
             logger.log("info", "User created successfully");
         } else {
             // User already exists
@@ -52,7 +53,8 @@ export const signUp = async (req, res) => {
             return res.status(400).send("Invalid data provided. User already exists.");
         }
     } catch (error) {
-        logger.log("error",error)
+        // Log error and respond with 500 Internal Server Error
+        logger.log("error", error);
         return res.status(500).json({ message: "Error creating user" });
     }
 };
@@ -82,10 +84,10 @@ export const signIn = async (req, res) => {
 
     // Respond with appropriate error messages
     if (matchUser == 0) {
-        logger.log("info","User not registered")
+        logger.log("info", "User not registered");
         return res.status(400).json({ message: "User not registered" });
     } else if (matchUser == 1) {
-        logger.log("info","Incorrect password")
+        logger.log("info", "Incorrect password");
         return res.status(400).json({ message: "Incorrect password" });
     }
 };

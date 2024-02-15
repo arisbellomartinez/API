@@ -12,7 +12,8 @@ export const verifyToken = async (req, res, next) => {
 
         // Check if token exists
         if (!token) {
-            logger.log("warn", "Token does not exist")
+            // Log warning and return 403 Forbidden status
+            logger.warn("Token does not exist");
             return res.status(403).json({ message: "No access token provided" });
         }
 
@@ -24,16 +25,17 @@ export const verifyToken = async (req, res, next) => {
 
         // If user does not exist, return 404 Not Found
         if (user.length === 0) {
-            logger.log("warn","User does not exist")
+            // Log warning and return 404 Not Found status
+            logger.warn("User does not exist");
             return res.status(404).json({ message: "User does not exist" });
         }
-        logger.log("info","User verified")
 
-        // If user exists, proceed to the next middleware
+        // Log info and proceed to the next middleware
+        logger.info("User verified");
         next();
     } catch (error) {
-        logger.error("error",error)
-        // If token verification fails, return 401 Unauthorized
+        // Log error and return 401 Unauthorized status
+        logger.error("error", error);
         return res.status(401).json({ message: "Unauthorized" });
     }
 };

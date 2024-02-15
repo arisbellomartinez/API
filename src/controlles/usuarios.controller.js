@@ -12,11 +12,11 @@ export const getUsuarios = async (req, res) => {
         // Respond with the retrieved users as JSON
         res.json(users);
 
-        logger.info("info","getUsuarios")
+        // Log info
+        logger.info("info", "getUsuarios");
     } catch (error) {
-
-        logger.error("error",error)
-        // Handle errors and respond with a 500 Internal Server Error
+        // Log error and respond with a 500 Internal Server Error
+        logger.error("error", error);
         return res.status(500).json({ message: "Error fetching users" });
     }
 };
@@ -32,17 +32,18 @@ export const getUsuariosById = async (req, res) => {
 
         // Check if user exists; if not, respond with a 404 Not Found
         if (user.length === 0) {
-            logger.log("warn","User not found")
+            logger.warn("User not found");
             return res.status(404).json({ message: "User not found" });
         }
 
         // Respond with the retrieved user as JSON
         res.json(user);
-        logger.log("info","getUsario id")
+        
+        // Log info
+        logger.info("info", "getUsario id");
     } catch (error) {
-
-        logger.error("error",error)
-        // Handle errors and respond with a 500 Internal Server Error
+        // Log error and respond with a 500 Internal Server Error
+        logger.error("error", error);
         return res.status(500).json({ message: "Error fetching user by ID" });
     }
 };
@@ -66,15 +67,16 @@ export const createUsuarios = async (req, res) => {
                 status: obj.status
             });
 
-            logger.info("info","createUsuarios succesfull")
+            // Log info
+            logger.info("info", "createUsuarios successful");
         } else {
-            logger.log("warn","createUsuarios failed invalid data")
             // Respond with an error message if data is missing
+            logger.warn("createUsuarios failed invalid data");
             return res.status(400).send("Invalid data provided");
         }
     } catch (error) {
-        logger.error("error",error)
-        // Handle errors and respond with a 500 Internal Server Error
+        // Log error and respond with a 500 Internal Server Error
+        logger.error("error", error);
         return res.status(500).json({ message: "Error creating user" });
     }
 };
@@ -95,21 +97,23 @@ export const updateUsuarios = async (req, res) => {
 
             // Check if the user was found and updated
             if (updatedCount === 0) {
-                logger.log("warn","User not found")
+                logger.warn("User not found");
                 return res.status(404).json("User not found");
             }
 
             // Respond with a success message
             res.send("User updated");
-            logger.log("info","User update succesfull")
+            
+            // Log info
+            logger.info("info", "User update successful");
         } else {
-            logger.log("warn","updateUsuarios failed invalid data")
             // Respond with an error message if data is missing
+            logger.warn("updateUsuarios failed invalid data");
             return res.status(400).send("Invalid data provided");
         }
     } catch (error) {
-        logger.error("error",error)
-        // Handle errors and respond with a 500 Internal Server Error
+        // Log error and respond with a 500 Internal Server Error
+        logger.error("error", error);
         return res.status(500).json({ message: "Error updating user" });
     }
 };
@@ -122,16 +126,18 @@ export const deleteUsuarios = async (req, res) => {
 
         // Check if the user was found and deleted
         if (deletedCount <= 0) {
-            logger.log("warn","User not found")
+            logger.warn("User not found");
             return res.status(404).json({ message: "User not found" });
         }
 
         // Respond with a 204 No Content status
         res.sendStatus(204);
-        logger.log("info","User delete succesfull")
+        
+        // Log info
+        logger.info("info", "User delete successful");
     } catch (error) {
-        logger.error("error",error)
-        // Handle errors and respond with a 500 Internal Server Error
+        // Log error and respond with a 500 Internal Server Error
+        logger.error("error", error);
         return res.status(500).json({ message: "Error deleting user" });
     }
 };
