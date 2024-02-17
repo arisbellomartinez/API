@@ -10,7 +10,7 @@ export const getUsuarios = async (req, res) => {
         const users = await knexInstance(T_USUARIOS).select("*");
 
         // Respond with the retrieved users as JSON
-        res.json(users);
+        res.status(200).json(users);
 
         // Log info
         logger.info("info", "getUsuarios");
