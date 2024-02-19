@@ -130,8 +130,8 @@ export const deleteUsuarios = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Respond with a 204 No Content status
-        res.sendStatus(204);
+        // Respond with a 200
+        res.sendStatus(200);
         
         // Log info
         logger.info("info", "User delete successful");

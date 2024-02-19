@@ -43,11 +43,18 @@ describe("POST /tasks",()=>{
 
 describe("PUT /tasks/:id",()=>{
     test("Should respond with 200",async()=>{
-        const response= await request(app).put("/tasks/10").set("x-access-token",token).send({
+        const response= await request(app).put("/tasks/15").set("x-access-token",token).send({
             "title":"test put",
             "description":"test put",
             "status": "test put"
         })
+        expect(response.statusCode).toBe(200)
+    })
+})
+
+describe("DELETE /tasks/:id",()=>{
+    test("Should respond with 200",async()=>{
+        const response= await request(app).delete("/tasks/12").set("x-access-token",token).send()
         expect(response.statusCode).toBe(200)
     })
 })
