@@ -1,10 +1,11 @@
 // Update with your config settings.
 
 import { DB_DATABASE, DB_HOST, DB_PASS, DB_USER } from "../config.js";
+import path from "path";
 
 const knexConfig = {
 
-  development: {
+  client: {
     client: 'mysql2',
     connection: {
       host: DB_HOST,
@@ -16,9 +17,6 @@ const knexConfig = {
       min:2,
       max:10
     },
-    migrations:{
-      directory: path.join(__dirname, "./src/config/db/models/"),
-    }
   },
 
 };
