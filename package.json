@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "migrate": "npx knex:migrate:latest --knexfile src/config/db/knexfile.mjs",
     "start": "nodemon src/index.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
   },
