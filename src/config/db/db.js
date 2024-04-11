@@ -7,7 +7,7 @@ import knexConfig from "./knexfile.mjs";
 
 
 // Create a Knex instance with the configured options
-const knexInstance = knex(knexConfig);
+const knexInstance = knex(knexConfig.development);
 
 // Export the Knex instance for use in other parts of the application
 export default knexInstance;
