@@ -36,6 +36,7 @@ export const signUp = async (req, res) => {
             };
 
             // Insert user into the database
+            
             const [insertedUser] = await knexInstance(T_AUTH).insert(newUser);
 
             // Generate JWT token
