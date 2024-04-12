@@ -5,27 +5,27 @@ import jwt from "jsonwebtoken";
 import { SECRET_KEY, T_AUTH } from "../config/config.js";
 import { logger } from "../config/logger.js";
 
+
 // Function to fetch all users from the database
-const allSing = async () => {
-    const aux = await knexInstance(T_AUTH).select("*");
+const allSing = async (i) => {
+    const aux = await knexInstance(T_AUTH).select("*").where("usuario","=",i);
     return aux;
 };
 
 // Sign up route handler
 export const signUp = async (req, res) => {
     try {
-        let match = 0;
         const obj = req.body;
-        const aux = await allSing();
+        const [aux] = await allSing(obj.usuario);
         
         // Check if the provided username already exists
-        aux.forEach((user) => {
-            if (user.usuario == obj.usuario) {
-                match++;
-            }
-        });
         
-        if (match == 0) {
+        if (aux) {
+            // User already exists
+            logger.log("warn", "User already exists");
+            return res.status(400).send("Invalid data provided. User already exists.");
+        }
+        
             // Hash the password
             const crypt = bcryptjs.hashSync(obj.password);
 
@@ -46,12 +46,7 @@ export const signUp = async (req, res) => {
 
             // Log success message
             logger.log("info", "User created successfully");
-        } else {
-            // User already exists
-            match = 0;
-            logger.log("warn", "User already exists");
-            return res.status(400).send("Invalid data provided. User already exists.");
-        }
+        
     } catch (error) {
         // Log error and respond with 500 Internal Server Error
         logger.log("error", error);
@@ -61,33 +56,25 @@ export const signUp = async (req, res) => {
 
 // Sign in route handler
 export const signIn = async (req, res) => {
-    let matchUser = 0;
+
     const obj = req.body;
-    const aux = await allSing();
+    const [aux] = await allSing(obj.usuario);
 
-    // Check if the provided username and password match with the database
-    aux.forEach((element) => {
-        if (element.usuario == obj.usuario) {
-            const condition = bcryptjs.compareSync(obj.password, element.password);
-            if (condition) {
-                matchUser = 2;
-                // Generate JWT token
-                const token = jwt.sign({ id: element.id }, SECRET_KEY, { expiresIn: 86400 });
-                // Respond with the token
-                res.json({ token });
-                logger.log("info", "User signed in successfully, token provided");
-            } else {
-                matchUser = 1;
-            }
-        }
-    });
 
-    // Respond with appropriate error messages
-    if (matchUser == 0) {
+    if (!aux) {
         logger.log("info", "User not registered");
         return res.status(400).json({ message: "User not registered" });
-    } else if (matchUser == 1) {
+    }
+
+    const condition = bcryptjs.compareSync(obj.password, aux.password);
+
+    if (!condition) {
         logger.log("info", "Incorrect password");
         return res.status(400).json({ message: "Incorrect password" });
     }
+
+    const token = jwt.sign({ id: aux.id }, SECRET_KEY, { expiresIn: 86400 });
+    // Respond with the token
+    logger.log("info", "User signed in successfully, token provided");
+    res.json({ token });
 };
