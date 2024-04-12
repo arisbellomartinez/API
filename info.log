@@ -726,3 +726,4 @@
 {"level":"info","message":"User signed in successfully, token provided","timestamp":"2024-04-12T04:57:43.650Z"}
 {"level":"info","message":"User signed in successfully, token provided","timestamp":"2024-04-12T04:57:44.593Z"}
 {"level":"info","message":"Server is running on port 8080","timestamp":"2024-04-12T04:58:31.555Z"}
+{"level":"info","message":"Server is running on port 8080","timestamp":"2024-04-12T05:01:29.262Z"}
