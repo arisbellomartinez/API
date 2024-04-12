@@ -25,6 +25,7 @@
     "mysql2": "^3.9.1",
     "path": "^0.12.7",
     "supertest": "^6.3.4",
+    "url": "^0.11.3",
     "winston": "^3.11.0"
   },
   "devDependencies": {
