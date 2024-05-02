@@ -36,17 +36,16 @@ export const signUp = async (req, res) => {
             };
 
             // Insert user into the database
-            
-            const [insertedUser] = await knexInstance(T_AUTH).insert(newUser);
+        const [insertedUser] = await knexInstance(T_AUTH).insert(newUser);
 
-            // Generate JWT token
-            const token = jwt.sign({ id: insertedUser }, SECRET_KEY, { expiresIn: 86400 });
+        // Generate JWT token
+        const token = jwt.sign({ id: insertedUser }, SECRET_KEY, { expiresIn: 86400 });
 
-            // Respond with the token
-            res.status(200).json({ token });
+        // Respond with the token
+        res.status(200).json({ token });
 
-            // Log success message
-            logger.log("info", "User created successfully");
+        // Log success message
+        logger.log("info", "User created successfully");
         
     } catch (error) {
         // Log error and respond with 500 Internal Server Error
